@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-table
       class="my-sticky-header-table"
-      title="Employee Information"
+      title="Manager Information"
       :grid="$q.screen.xs"
       :rows="rows"
       :columns="columns"
@@ -140,18 +140,11 @@ const columns = [
     field: 'department',
     sortable: true,
   },
-  {
-    name: 'manager',
-    align: 'center',
-    label: 'Hiring Manager',
-    field: 'manager',
-    sortable: true,
-  },
 ];
 
 const rows = [
   {
-    name: 'Frozen Yogurt',
+    name: 'Analyn Villa',
     id: 159,
     startdate: 6.0,
     position: 'Collection Specialist',
@@ -159,7 +152,7 @@ const rows = [
     manager: 'Laureen',
   },
   {
-    name: 'Ice cream sandwich',
+    name: 'Princess Jacinto',
     id: 237,
     startdate: 9.0,
     position: 'Collection Specialist',
@@ -167,7 +160,7 @@ const rows = [
     manager: 'Laureen',
   },
   {
-    name: 'Eclair',
+    name: 'Reynan Zuniega',
     id: 262,
     startdate: 16.0,
     position: 'Collection Specialist',
@@ -175,7 +168,7 @@ const rows = [
     manager: 'Laureen',
   },
   {
-    name: 'Cupcake',
+    name: 'Claude Erika Zaragoza',
     id: 305,
     startdate: 3.7,
     position: 'Collection Specialist',
@@ -183,7 +176,7 @@ const rows = [
     manager: 'Laureen',
   },
   {
-    name: 'Gingerbread',
+    name: 'Alex Austero Jr.',
     id: 356,
     startdate: 16.0,
     position: 'Collection Specialist',
@@ -191,7 +184,7 @@ const rows = [
     manager: 'Laureen',
   },
   {
-    name: 'Jelly bean',
+    name: 'JOhnson Satuito',
     id: 375,
     startdate: 0.0,
     position: 'Collection Specialist',
@@ -199,7 +192,7 @@ const rows = [
     manager: 'Laureen',
   },
   {
-    name: 'Lollipop',
+    name: 'Jayme Dologdog',
     id: 392,
     startdate: 0.2,
     position: 'Collection Specialist',
@@ -207,7 +200,7 @@ const rows = [
     manager: 'Laureen',
   },
   {
-    name: 'Honeycomb',
+    name: 'Camille PeÑa',
     id: 408,
     startdate: 3.2,
     position: 'Collection Specialist',
@@ -215,7 +208,7 @@ const rows = [
     manager: 'Laureen',
   },
   {
-    name: 'Donut',
+    name: 'Dory Etareja',
     id: 452,
     startdate: 25.0,
     position: 'Collection Specialist',
@@ -223,7 +216,7 @@ const rows = [
     manager: 'Laureen',
   },
   {
-    name: 'KitKat',
+    name: 'Marlito Escobar',
     id: 518,
     position: 'Collection Specialist',
     department: 'Collection',
