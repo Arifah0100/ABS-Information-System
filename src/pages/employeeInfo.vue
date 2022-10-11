@@ -249,13 +249,12 @@ export default {
   width: 100%
   max-width: 100%
 
-
   .q-table__top,
   .q-table__bottom,
 
- thead tr:first-child th
+thead tr:first-child th
     /* bg color is important for th; just specify one */
-    background-color: white
+  background-color: white
 
   thead tr th
     position: sticky
