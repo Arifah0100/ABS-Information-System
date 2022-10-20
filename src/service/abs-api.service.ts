@@ -55,7 +55,7 @@ class ABSApiService extends DefaultApi {
   }
 
   async loginUser(userName: string, password: string) {
-    const response = await absApiService.login(userName, md5(password));
+    const response = await absApiService.login(userName, password);
     if (response.status == 201) {
       sessionStorage.setItem('access-token', response.data.accessToken || '');
       sessionStorage.setItem(
