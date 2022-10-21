@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Configuration, DefaultApi } from './rest-api';
-import md5 from 'md5';
 const localBasePath = 'http://' + location.hostname + ':3000';
 
 interface AxiosRequestConfig2 extends AxiosRequestConfig {
@@ -87,7 +86,7 @@ class ABSApiService extends DefaultApi {
 
   async changePassword(pin: string) {
     const res = await this.changePin({
-      password: md5(pin),
+      password: pin,
     });
     if (res.status != 200) {
       throw new Error(res.statusText);
@@ -95,7 +94,7 @@ class ABSApiService extends DefaultApi {
   }
 
   async verifyPassword(pin: string) {
-    const res = await this.verifyPin(md5(pin));
+    const res = await this.verifyPin(pin);
     if (res.status == 200) {
       return res.data;
     }
