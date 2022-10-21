@@ -49,7 +49,7 @@
               <q-form class="q-gutter-md" @submit="login()">
                 <q-input
                   autofocus
-                  v-model="username"
+                  v-model="loginForm.username"
                   label="Username"
                   lazy-rules
                   :rules="[
@@ -61,9 +61,9 @@
                   </template>
                 </q-input>
                 <q-input
-                  v-model="password"
+                  v-model="loginForm.password"
                   label="Password"
-                  :type="isPwd ? 'password' : 'text'"
+                  :type="isShowPass ? 'password' : 'text'"
                   lazy-rules
                   :rules="[
                     (val) => (val && val.length > 0) || 'Input your password',
@@ -71,9 +71,9 @@
                 >
                   <template v-slot:append>
                     <q-icon
-                      :name="isPwd ? 'visibility_off' : 'visibility'"
+                      :name="isShowPass ? 'visibility_off' : 'visibility'"
                       class="cursor-pointer"
-                      @click="isPwd = !isPwd"
+                      @click="isShowPass = !isShowPass"
                     />
                   </template>
                   <template v-slot:prepend>
@@ -87,6 +87,7 @@
                     color="blue"
                     size="md"
                     type="submit"
+                    :loading="submitState"
                   />
                   <div class="q-mt-lg">
                     <div class="q-mt-sm">
@@ -119,7 +120,7 @@ export default defineComponent({
       isShowPass: false,
       check: false,
       loginForm: {
-        userName: '',
+        username: '',
         password: '',
       },
       error1: false,
@@ -131,11 +132,12 @@ export default defineComponent({
       this.submitState = true;
       try {
         await authStore.loginUser(
-          this.loginForm.userName,
+          this.loginForm.username,
           this.loginForm.password
         );
-        this.$router.push({ name: 'dashboard' });
+        this.$router.push({ name: '' });
       } catch (e) {
+        this.submitState = false;
         const status = String((e as { message: string }).message || e)
           .replace(/error|:|failed/gi, '')
           .trim();

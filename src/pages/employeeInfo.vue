@@ -1,113 +1,120 @@
 <template>
-  <div class="q-pa-md">
-    <q-table
-      class="my-sticky-header-table"
-      title="Employee Information"
-      :grid="$q.screen.xs"
-      :rows="rows"
-      :columns="columns"
-      row-key="name"
-    >
-      <template v-slot:top-right>
-        <div class="q-gutter-sm row">
-          <q-input
-            outlined
-            rounded
-            dense
-            debounce="300"
-            v-model="filter"
-            placeholder="Search"
-          >
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-          <div style="max-width: 300px">
-            <q-btn
-              color="primary"
-              dense
-              flat
-              icon="add"
-              label="Add Account"
-              @click="addNewAccount = true"
-            />
-            <q-tooltip :offset="[0, 8]">Add Account</q-tooltip>
+  <q-page>
+    <div class="q-pa-md">
+      <q-table
+        class="my-sticky-header-table"
+        title="Employee Information"
+        :grid="$q.screen.xs"
+        :rows="employeeStore.employees"
+        :columns="columns"
+        row-key="empID"
+      >
+        <template v-slot:top-right>
+          <div class="q-gutter-sm row">
+            <q-input
+              outlined
+              rounded
+              densea
+              debounce="300"
+              v-model="filter"
+              placeholder="Search"
+            >
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+            <div style="max-width: 300px">
+              <q-btn
+                color="primary"
+                dense
+                flat
+                icon="add"
+                label="Add Account"
+                @click="addNewAccount = true"
+              />
+              <q-tooltip :offset="[0, 8]">Add Account</q-tooltip>
+            </div>
           </div>
-        </div>
-      </template>
-      <template v-slot:body-cell-action="props">
-        <q-td :props="props">
-          <div class="q-gutter-sm">
-            <q-btn
-              round
-              color="warning"
-              icon="edit"
-              size="sm"
-              flat
-              dense
-              @click="openEditDialog(props.row.student)"
-              ><q-tooltip class="bg-warning text-black" :offset="[10, 10]">
-                Edit
-              </q-tooltip></q-btn
-            >
-            <q-dialog v-model="editRowAccount" persistent>
-              <q-card style="width: 1100px; max-width: 100vw">
-                <q-card-section class="row">
-                  <q-toolbar>
-                    <div class="text-h6">Edit Account</div>
-                    <q-space />
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      icon="close"
-                      color="primary"
-                      v-close-popup
-                    />
-                  </q-toolbar>
-                </q-card-section>
-              </q-card>
-            </q-dialog>
-            <q-btn
-              color="red-10"
-              icon="delete"
-              size="sm"
-              class="q-ml-sm"
-              flat
-              round
-              dense
-              @click="deleteSpecificAccount(props.row)"
-              ><q-tooltip class="bg-red-10" :offset="[10, 10]">
-                Delete
-              </q-tooltip></q-btn
-            >
-            <q-btn
-              round
-              color="primary"
-              icon="more_vert"
-              size="md"
-              flat
-              dense
-              @click="openDetailDialog(props.row)"
-              ><q-tooltip class="bg-primary" :offset="[10, 10]">
-                Details
-              </q-tooltip></q-btn
-            >
-          </div>
-        </q-td>
-      </template>
-    </q-table>
-  </div>
+        </template>
+        <template v-slot:body-cell-action="props">
+          <q-td :props="props">
+            <div class="q-gutter-sm">
+              <q-btn
+                round
+                color="warning"
+                icon="edit"
+                size="sm"
+                flat
+                dense
+                @click="openEditDialog(props.row.student)"
+                ><q-tooltip class="bg-warning text-black" :offset="[10, 10]">
+                  Edit
+                </q-tooltip></q-btn
+              >
+              <q-dialog v-model="editRowAccount" persistent>
+                <q-card style="width: 1100px; max-width: 100vw">
+                  <q-card-section class="row">
+                    <q-toolbar>
+                      <div class="text-h6">Edit Account</div>
+                      <q-space />
+                      <q-btn
+                        flat
+                        round
+                        dense
+                        icon="close"
+                        color="primary"
+                        v-close-popup
+                      />
+                    </q-toolbar>
+                  </q-card-section>
+                </q-card>
+              </q-dialog>
+              <q-btn
+                color="red-10"
+                icon="delete"
+                size="sm"
+                class="q-ml-sm"
+                flat
+                round
+                dense
+                @click="deleteSpecificAccount(props.row)"
+                ><q-tooltip class="bg-red-10" :offset="[10, 10]">
+                  Delete
+                </q-tooltip></q-btn
+              >
+              <q-btn
+                round
+                color="primary"
+                icon="more_vert"
+                size="md"
+                flat
+                dense
+                @click="openDetailDialog(props.row)"
+                ><q-tooltip class="bg-primary" :offset="[10, 10]">
+                  Details
+                </q-tooltip></q-btn
+              >
+            </div>
+          </q-td>
+        </template>
+      </q-table>
+    </div>
+  </q-page>
 </template>
 
-<script>
-const columns = [
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { EmployeesDto } from 'src/service/rest-api';
+import { useEmployeeStore } from 'src/stores/epmloyee.store';
+import { QTableColumn } from 'quasar';
+
+const columns: QTableColumn[] = [
   { name: 'action', align: 'center', label: '', field: 'action' },
   {
-    name: 'id',
+    name: 'empID',
     align: 'center',
     label: 'Employee ID',
-    field: 'id',
+    field: (row: EmployeesDto) => row.empID,
     sortable: true,
   },
   {
@@ -115,130 +122,66 @@ const columns = [
     required: true,
     label: 'Full Name',
     align: 'center',
-    field: (row) => row.name,
-    format: (val) => `${val}`,
+    field: (row: EmployeesDto) =>
+      `${row.firstName} ${row.middleName} ${row.lastName}`,
     sortable: true,
   },
   {
     name: 'startdate',
     align: 'center',
     label: 'Start Date',
-    field: 'startdate',
+    field: (row: EmployeesDto) => row.startDate,
     sortable: true,
   },
   {
     name: 'position',
     align: 'center',
     label: 'Position Title',
-    field: 'position',
+    field: (row: EmployeesDto) => row.position,
     sortable: true,
   },
   {
     name: 'department',
     align: 'center',
     label: 'Department Name',
-    field: 'department',
+    field: (row: EmployeesDto) => row.department,
     sortable: true,
   },
   {
     name: 'manager',
     align: 'center',
     label: 'Hiring Manager',
-    field: 'manager',
+    field: (row: EmployeesDto) => row.position,
     sortable: true,
   },
 ];
-
-const rows = [
-  {
-    name: 'Frozen Yogurt',
-    id: 159,
-    startdate: 6.0,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-  {
-    name: 'Ice cream sandwich',
-    id: 237,
-    startdate: 9.0,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-  {
-    name: 'Eclair',
-    id: 262,
-    startdate: 16.0,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-  {
-    name: 'Cupcake',
-    id: 305,
-    startdate: 3.7,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-  {
-    name: 'Gingerbread',
-    id: 356,
-    startdate: 16.0,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-  {
-    name: 'Jelly bean',
-    id: 375,
-    startdate: 0.0,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-  {
-    name: 'Lollipop',
-    id: 392,
-    startdate: 0.2,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-  {
-    name: 'Honeycomb',
-    id: 408,
-    startdate: 3.2,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-  {
-    name: 'Donut',
-    id: 452,
-    startdate: 25.0,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-  {
-    name: 'KitKat',
-    id: 518,
-    position: 'Collection Specialist',
-    department: 'Collection',
-    manager: 'Laureen',
-  },
-];
-
-export default {
+const employeeStore = useEmployeeStore();
+export default defineComponent({
+  // data() {
+  //   const employeeForm: EmployeesDto = {
+  //     empID: 0,
+  //     firstName: '',
+  //     middleName: '',
+  //     lastName: '',
+  //     startDate: '',
+  //     department: '',
+  //     position: '',
+  //     gender: '',
+  //   };
+  // },
   setup() {
     return {
       columns,
-      rows,
+      employeeStore,
     };
   },
-};
+
+  async created() {
+    await employeeStore.getAllEmployee();
+  },
+
+  // async addEmployee() {},
+});
 </script>
 
 <style lang="sass">
