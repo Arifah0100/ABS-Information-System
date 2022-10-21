@@ -135,7 +135,7 @@ export default defineComponent({
           this.loginForm.username,
           this.loginForm.password
         );
-        this.$router.push({ name: '' });
+        this.$router.replace('/employee');
       } catch (e) {
         this.submitState = false;
         const status = String((e as { message: string }).message || e)
