@@ -23,17 +23,20 @@
                 <q-icon name="search" />
               </template>
             </q-input>
-            <div style="max-width: 300px">
+            <div>
               <q-btn
                 color="primary"
                 dense
                 flat
                 icon="add"
                 label="Add Account"
-                @click="addNewAccount = true"
+                @click="showAddDialog = true"
               />
               <q-tooltip :offset="[0, 8]">Add Account</q-tooltip>
             </div>
+            <q-dialog v-model="showAddDialog" persistent>
+              <AddEmployeeComponent />
+            </q-dialog>
           </div>
         </template>
         <template v-slot:body-cell-action="props">
@@ -47,10 +50,11 @@
                 flat
                 dense
                 @click="openEditDialog(props.row.student)"
-                ><q-tooltip class="bg-warning text-black" :offset="[10, 10]">
-                  Edit
-                </q-tooltip></q-btn
               >
+                <q-tooltip class="bg-warning text-black" :offset="[10, 10]">
+                  Edit
+                </q-tooltip>
+              </q-btn>
               <q-dialog v-model="editRowAccount" persistent>
                 <q-card style="width: 1100px; max-width: 100vw">
                   <q-card-section class="row">
@@ -78,10 +82,11 @@
                 round
                 dense
                 @click="deleteSpecificAccount(props.row)"
-                ><q-tooltip class="bg-red-10" :offset="[10, 10]">
-                  Delete
-                </q-tooltip></q-btn
               >
+                <q-tooltip class="bg-red-10" :offset="[10, 10]">
+                  Delete
+                </q-tooltip>
+              </q-btn>
               <q-btn
                 round
                 color="primary"
@@ -90,10 +95,11 @@
                 flat
                 dense
                 @click="openDetailDialog(props.row)"
-                ><q-tooltip class="bg-primary" :offset="[10, 10]">
-                  Details
-                </q-tooltip></q-btn
               >
+                <q-tooltip class="bg-primary" :offset="[10, 10]">
+                  Details
+                </q-tooltip>
+              </q-btn>
             </div>
           </q-td>
         </template>
@@ -103,10 +109,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { EmployeesDto } from 'src/service/rest-api';
 import { useEmployeeStore } from 'src/stores/epmloyee.store';
 import { QTableColumn } from 'quasar';
+import AddEmployeeComponent from '../components/EmployeeComponents/AddEmployeeComponent.vue';
 
 const columns: QTableColumn[] = [
   { name: 'action', align: 'center', label: '', field: 'action' },
@@ -157,27 +164,39 @@ const columns: QTableColumn[] = [
 ];
 const employeeStore = useEmployeeStore();
 export default defineComponent({
-  // data() {
-  //   const employeeForm: EmployeesDto = {
-  //     empID: 0,
-  //     firstName: '',
-  //     middleName: '',
-  //     lastName: '',
-  //     startDate: '',
-  //     department: '',
-  //     position: '',
-  //     gender: '',
-  //   };
-  // },
+  components: { AddEmployeeComponent },
+  data() {
+    return {
+      filter: '',
+      editRowAccount: false,
+      showAddDialog: false,
+    };
+  },
+
   setup() {
     return {
       columns,
       employeeStore,
+      model: ref(null),
+      step: ref(1),
+      genderOption: ['Male', 'Female'],
+      date: ref('2019/02/01'),
     };
   },
 
   async created() {
-    await employeeStore.getAllEmployee();
+    await employeeStore.init();
+  },
+
+  methods: {
+    onRejected(rejectedEntries: string | any[]) {
+      // Notify plugin needs to be installed
+      // https://quasar.dev/quasar-plugins/notify#Installation
+      this.$q.notify({
+        type: 'negative',
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
+      });
+    },
   },
 
   // async addEmployee() {},
