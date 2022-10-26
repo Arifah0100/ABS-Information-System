@@ -61,10 +61,10 @@ export interface ChangePasswordDto {
 export interface EmployeesDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof EmployeesDto
      */
-    'empID': number;
+    'empID': string;
     /**
      * 
      * @type {string}

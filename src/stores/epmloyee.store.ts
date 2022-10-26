@@ -4,7 +4,7 @@ import employeeService from 'src/service/employee.service';
 
 export interface IEmployees {
   id: number;
-  empID: number;
+  empID: string;
   firstName: string;
   middleName: string;
   lastName: string;
@@ -32,17 +32,22 @@ export const useEmployeeStore = defineStore('employee-store', {
   getters: {},
 
   actions: {
+    async init() {
+      const res = await fetch('http://localhost:3000/employees');
+      const data = await res.json();
+      this.employees = data;
+    },
     async addEmployee(payload: EmployeesDto) {
       const result = await employeeService.create(payload);
-      await this.getAllEmployee();
+      await this.init();
     },
     async updateEmployee(payload: any) {
       const result = await employeeService.update(payload.id, payload);
-      await this.getAllEmployee();
+      await this.init();
     },
     async deleteEmployee(id: number) {
       const result = await employeeService.delete(id);
-      await this.getAllEmployee();
+      await this.init();
     },
     async getAllEmployee() {
       const result = await employeeService.getAll();
