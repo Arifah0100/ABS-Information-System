@@ -337,12 +337,14 @@
 
                   <q-separator vertical inset class="q-mx-lg" />
 
-                  <div class="column items-center">
+                  <div class="column text-center">
                     <q-avatar size="150px">
-                      <img src="https://cdn.quasar.dev/img/avatar4.jpg" />
+                      <img src="assets/ABS.png" />
                     </q-avatar>
 
-                    <div class="text-h6 q-mt-md q-mb-xs text-uppercase">
+                    <div
+                      class="text-subtitle2 text-center q-mt-md q-mb-xs text-uppercase"
+                    >
                       {{ employee.firstName }} {{ employee.middleName }}
                       {{ employee.lastName }}
                     </div>
@@ -480,5 +482,4 @@ export default defineComponent({
 });
 </script>
 
-<style>
-</style>
+<style></style>

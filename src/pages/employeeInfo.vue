@@ -14,7 +14,7 @@
             <q-input
               outlined
               rounded
-              densea
+              dense
               debounce="300"
               v-model="filter"
               placeholder="Search"
@@ -39,8 +39,10 @@
             </q-dialog>
           </div>
         </template>
+
         <template v-slot:body-cell-action="props">
           <q-td :props="props">
+            <!----Edit Dialog-->
             <div class="q-gutter-sm">
               <q-btn
                 round
@@ -49,30 +51,17 @@
                 size="sm"
                 flat
                 dense
-                @click="openEditDialog(props.row.student)"
+                @click="showEditDialog = true"
               >
                 <q-tooltip class="bg-warning text-black" :offset="[10, 10]">
                   Edit
                 </q-tooltip>
               </q-btn>
-              <q-dialog v-model="editRowAccount" persistent>
-                <q-card style="width: 1100px; max-width: 100vw">
-                  <q-card-section class="row">
-                    <q-toolbar>
-                      <div class="text-h6">Edit Account</div>
-                      <q-space />
-                      <q-btn
-                        flat
-                        round
-                        dense
-                        icon="close"
-                        color="primary"
-                        v-close-popup
-                      />
-                    </q-toolbar>
-                  </q-card-section>
-                </q-card>
+              <q-dialog v-model="showEditDialog" persistent>
+                <EditEmployeeComponent />
               </q-dialog>
+
+              <!---------------Delete Dialog--------------->
               <q-btn
                 color="red-10"
                 icon="delete"
@@ -81,11 +70,39 @@
                 flat
                 round
                 dense
-                @click="deleteSpecificAccount(props.row)"
+                @click="showDeleteDialog = true"
               >
                 <q-tooltip class="bg-red-10" :offset="[10, 10]">
                   Delete
                 </q-tooltip>
+                <q-dialog v-model="showDeleteDialog" persistent>
+                  <q-card
+                    class="bg-primary text-white"
+                    style="max-width: 1000px"
+                  >
+                    <q-bar class="q-py-lg q-pa-md text-overline">
+                      Confirmation
+                      <q-space />
+
+                      <q-btn dense flat icon="close" v-close-popup>
+                        <q-tooltip class="bg-white text-primary"
+                          >Close</q-tooltip
+                        >
+                      </q-btn>
+                    </q-bar>
+                    <q-card-section class="q-pt-none">
+                      <q-form>
+                        <div class="q-pt-md">
+                          Are you sure you want to delete this employee?
+                        </div>
+                      </q-form>
+                    </q-card-section>
+                    <q-card-actions align="right">
+                      <q-btn glossy label="Cancel" v-close-popup />
+                      <q-btn color="negative" glossy label="Save" />
+                    </q-card-actions>
+                  </q-card>
+                </q-dialog>
               </q-btn>
               <q-btn
                 round
@@ -94,7 +111,6 @@
                 size="md"
                 flat
                 dense
-                @click="openDetailDialog(props.row)"
               >
                 <q-tooltip class="bg-primary" :offset="[10, 10]">
                   Details
@@ -114,6 +130,7 @@ import { EmployeesDto } from 'src/service/rest-api';
 import { useEmployeeStore } from 'src/stores/epmloyee.store';
 import { QTableColumn } from 'quasar';
 import AddEmployeeComponent from '../components/EmployeeComponents/AddEmployeeComponent.vue';
+import EditEmployeeComponent from 'src/components/EmployeeComponents/EditEmployeeComponent.vue';
 
 const columns: QTableColumn[] = [
   { name: 'action', align: 'center', label: '', field: 'action' },
@@ -164,12 +181,14 @@ const columns: QTableColumn[] = [
 ];
 const employeeStore = useEmployeeStore();
 export default defineComponent({
-  components: { AddEmployeeComponent },
+  components: { AddEmployeeComponent, EditEmployeeComponent },
   data() {
     return {
       filter: '',
-      editRowAccount: false,
+      addRowAccount: false,
       showAddDialog: false,
+      showEditDialog: false,
+      showDeleteDialog: false,
     };
   },
 

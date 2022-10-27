@@ -22,12 +22,6 @@
               label="Employee"
               to="/employee"
             />
-            <q-btn
-              flat
-              class="text-overline text-white no-wrap"
-              label="Manager"
-              to="/manager"
-            />
           </div>
         </q-toolbar-title>
 
@@ -68,7 +62,7 @@
         "
       >
         <q-list padding>
-          <q-item clickable v-ripple>
+          <q-item active clickable v-ripple to="/manager">
             <q-item-section avatar>
               <q-icon name="people" />
             </q-item-section>
@@ -76,7 +70,7 @@
             <q-item-section> Manage Admin </q-item-section>
           </q-item>
 
-          <q-item active clickable v-ripple>
+          <q-item clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="file_upload" />
             </q-item-section>
@@ -95,7 +89,7 @@
       </q-scroll-area>
 
       <div class="q-pa-sm absolute-top" style="height: 150px">
-        <div class="row justify-center">
+        <div class="row justify-center q-pt-md">
           <q-avatar size="80px" class="q-mb-sm">
             <img src="~assets/ABS.png" class="q-pb-sm" />
           </q-avatar>
